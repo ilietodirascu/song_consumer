@@ -171,13 +171,13 @@ async fn get_tomp3_k(client: &Client, video_id: &str) -> Result<Option<String>, 
     ];
 
     log::info!("Retrieving k parameter for video ID: {}", video_id);
-
+    let cookie = env::var("CLOUD_FLARE_COOKIE")?;
     let response = client
     .post(url)
     .form(&params)
     .header("Referer", "https://tomp3.cc/")
     .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36")
-    .header("Cookie", "cf_clearance=Vd1ktw5Z9YthOFv3Wwo1hM3SmG9t_AwB5inytX5q9gU-1730019672-1.2.1.1-m7WkT2bPm8zFrlE67EB380Ex7Rp5XZoLITkQ9oZ3xkqykmsALrGvSCJIG1TcPNofVD0kocb2OF24yln0Smcm1GB0IGBD6x2lJVJuwhc20IrjX7s6djYhmME6BobBb_Qh5H83KcJykIRKNLF9uwlAm2CUTvqAUSjHF9WOzTz1xUpi1AdhSkHaIlgoLXtErj08JlzlZZqIn8_e7zxkhmOoA9Fd5nDyiP1n3kgEHIw0xKRgsY.ncu8TCdqm2eFTpgyt_G4XXeMP8qLrN0m9xZlmwxluW.xP9SkGqx5Txp3crhOXGi8ybofEm89bJnGqISnYA0iysI4z3CiicHqQMvFTdIPYshHr7YLs3zit7BXOs54S50a2LjEeUaw8UnplO98kELEq6sXphl8FifPUvFSCYw").send().await?;
+    .header("Cookie", cookie).send().await?;
 
     let status = response.status();
     let text = response.text().await?;
